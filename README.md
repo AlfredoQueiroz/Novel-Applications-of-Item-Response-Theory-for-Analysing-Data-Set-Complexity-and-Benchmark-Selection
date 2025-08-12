@@ -7,4 +7,4 @@ Title: Novel Applications of Item Response Theory for Analysing Data Set Complex
 
 Authors: João Luiz Junho Pereira, Alfredo Antonio Alencar Exposito De Queiroz, Telmo de Menezes e Silva Filho, Ana Carolina Lorena, Rafael Gomes Mantovani, Gisele Lobo Pappa, Ricardo Bastos Cavalcante Prudêncio.
 
-Published in: [Name of the conference/journal], Year
+Published in: [Name of the journal], Year
