@@ -1,4 +1,10 @@
+import os
+import arff
+import torch
+
+from tqdm import tqdm
 import pandas as pd
+import numpy as np
 
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import balanced_accuracy_score, make_scorer
@@ -20,6 +26,14 @@ from sklearn.dummy import DummyClassifier
 
 from tabpfn import TabPFNClassifier
 from xgboost import XGBClassifier
+
+import warnings
+warnings.filterwarnings("ignore", message=".*The max_iter was reached which means the coef_ did not converge*")
+warnings.filterwarnings("ignore", message=".*lbfgs failed to converge (status=1)*")
+warnings.filterwarnings("ignore", message=".*Running on CPU with more than 200 samples may be slow.*")
+
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", message=".*Liblinear failed to converge, increase the number of iterations.*")
 
 
 def calculate_bac_cv(classificador, X, y, n_splits=10):
@@ -106,14 +120,17 @@ def preprocess(df, col_class):
 
     return X, y
 
-def apply_classifier(arff_file_path, classifiers_params, registros_fallback_source, registros_erro_source, registros_resultados_source, source_label, datasets_com_erro_knn_source):
+def apply_classifier(arff_file_path, classifiers_params, source_label):
 
     df = load_arff_dataset(arff_file_path)
 
     nome_arquivo = os.path.basename(arff_file_path)
     dataset_name = os.path.splitext(nome_arquivo)[0]
+    col_class = df.columns[-1]
 
-    X, y = preprocess(df, col_classe)
+    X, y = preprocess(df, col_class)
+
+    results = []
 
     for clf_name, params_list in classifiers_params.items():
 
@@ -138,7 +155,8 @@ def apply_classifier(arff_file_path, classifiers_params, registros_fallback_sour
                     std_bac = np.std(scores)
                     return mean_bac, std_bac
 
-                result = calculate_bac_nn()
+                mean_bac, std_bac = calculate_bac_nn()
+                results.append((source_label, dataset_name, clf_name, params, round(mean_bac,4), round(std_bac,4)))
                 continue
 
             elif clf_name == 'avnn':
@@ -147,6 +165,12 @@ def apply_classifier(arff_file_path, classifiers_params, registros_fallback_sour
 
                 cv = StratifiedKFold(n_splits=min(10, min_classe), shuffle=True, random_state=42)
                 bac_scores = []
+
+                if not isinstance(X, pd.DataFrame):
+                    X = pd.DataFrame(X)
+
+                if not isinstance(y, pd.Series):
+                    y = pd.Series(y)
 
                 def calculate_bac_avnn():
                         for train_idx, test_idx in cv.split(X, y):
@@ -170,10 +194,17 @@ def apply_classifier(arff_file_path, classifiers_params, registros_fallback_sour
                         dev_bac = np.std(bac_scores)
                         return mean_bac, dev_bac
 
-                result = calculate_bac_avnn()
+                mean_bac, std_bac = calculate_bac_avnn()
+                results.append((source_label, dataset_name, clf_name, params, round(mean_bac,4), round(std_bac,4)))
                 continue
 
             elif clf_name == 'tabpfn':
+
+                if not isinstance(X, pd.DataFrame):
+                    X = pd.DataFrame(X)
+
+                if not isinstance(y, pd.Series):
+                    y = pd.Series(y)
 
                 min_classe = y.value_counts().min()
 
@@ -198,7 +229,8 @@ def apply_classifier(arff_file_path, classifiers_params, registros_fallback_sour
                     std_bac = np.std(bac_scores)
                     return mean_bac, std_bac
 
-                result = tabpfn_classifier()
+                mean_bac, std_bac = tabpfn_classifier()
+                results.append((source_label, dataset_name, clf_name, params, round(mean_bac,4), round(std_bac,4)))
                 continue
 
             elif clf_name == 'adaboost':
@@ -234,43 +266,66 @@ def apply_classifier(arff_file_path, classifiers_params, registros_fallback_sour
             elif clf_name == 'lda':
                 clf = lda_classifier(**params)
 
-            result = calculate_bac_cv(clf, X, y)
+            mean_bac, std_bac = calculate_bac_cv(clf, X, y)
+            results.append((source_label, dataset_name, clf_name, params, round(mean_bac,4), round(std_bac,4)))
 
-            return result
+    return results
 
-...
-#Parameters of the classifiers to be used
-ks = [1,5,10]
-weights = ['uniform', 'distance']
-estimators = [50,100,1000]
-criterion =['gini', 'entropy']
-depth = [None, 3, 50]
-split = ['best', 'random']
-strategies = ['most_frequent', 'uniform']
-penalties = ['l1', 'l2', 'elasticnet']
-Cs = [0.1, 1.0, 1000]
-kernels = ['poly', 'rbf']
-degrees = [3,5]
-tols = [0.0001, 0.001, 0.01]
-activations = ['relu', 'logistic']
+if __name__ == '__main__':
+    directories = [
+        ('./data/OpenML/', 'OpenML'),
+        ('./data/UCI/', 'UCI'),
+        ('./data/LC-ICPR/', 'LC-ICPR')
+    ]
+    #Parameters of the classifiers to be used
+    ks = [1,5,10]
+    weights = ['uniform', 'distance']
+    estimators = [50,100,1000]
+    criterion =['gini', 'entropy']
+    depth = [None, 3, 50]
+    split = ['best', 'random']
+    strategies = ['most_frequent', 'uniform']
+    penalties = ['l1', 'l2', 'elasticnet']
+    Cs = [0.1, 1.0, 1000]
+    kernels = ['poly', 'rbf']
+    degrees = [3,5]
+    tols = [0.0001, 0.001, 0.01]
+    activations = ['relu', 'logistic']
 
-classifiers_params = {
-        'IBk_knn': [{'k':k, 'weights':w} for k in ks for w in weights],
-        'adaboost': [{'n_estimators':v_estimator} for v_estimator in estimators],
-        'decisiontree': [{'criterion':cri , 'depth': dep, 'splitter': spl} for cri in criterion for dep in depth for spl in split],
-        'extratree': [{'criterion':cri , 'depth': dep} for cri in criterion for dep in depth],
-        'dummy':[{'strategy':strat} for strat in strategies],
-        'j48': [{'depth': dep} for dep in depth],
-        'lda':[{'tol': v_tol} for v_tol in tols],
-        'nb_gaus': [{}],
-        'svm_linear':[{'C': v_C} for v_C in Cs],
-        'svm': [{'C': v_C, 'kernel': ker, 'degree': deg} for v_C in Cs for ker in kernels for deg in degrees],
-        'multinom': [{'C': v_C} for v_C in Cs],
-        'glmnet': [{'penalty':pen , 'C': v_C} for pen in penalties for v_C in Cs],
-        'xgb': [{'n_estimators':v_estimator , 'depth': dep} for v_estimator in estimators for dep in depth],
-        'gbm': [{'n_estimators':v_estimator , 'depth': dep} for v_estimator in estimators for dep in depth],
-        'rf': [{'n_estimators':v_estimator , 'depth': dep} for v_estimator in estimators for dep in depth],
-        'tabpfn':[{}],
-        'nn': [{'activation':act} for act in activations],
-        'avnn': [{'activation':act} for act in activations]
-}
+    classifiers_params = {
+            'IBk_knn': [{'k':k, 'weights':w} for k in ks for w in weights],
+            'adaboost': [{'n_estimators':v_estimator} for v_estimator in estimators],
+            'decisiontree': [{'criterion':cri , 'depth': dep, 'splitter': spl} for cri in criterion for dep in depth for spl in split],
+            'extratree': [{'criterion':cri , 'depth': dep} for cri in criterion for dep in depth],
+            'dummy':[{'strategy':strat} for strat in strategies],
+            'j48': [{'depth': dep} for dep in depth],
+            'lda':[{'tol': v_tol} for v_tol in tols],
+            'nb_gaus': [{}],
+            'svm_linear':[{'C': v_C} for v_C in Cs],
+            'svm': [{'C': v_C, 'kernel': ker, 'degree': deg} for v_C in Cs for ker in kernels for deg in degrees],
+            'multinom': [{'C': v_C} for v_C in Cs],
+            'glmnet': [{'penalty':pen , 'C': v_C} for pen in penalties for v_C in Cs],
+            'xgb': [{'n_estimators':v_estimator , 'depth': dep} for v_estimator in estimators for dep in depth],
+            'gbm': [{'n_estimators':v_estimator , 'depth': dep} for v_estimator in estimators for dep in depth],
+            'rf': [{'n_estimators':v_estimator , 'depth': dep} for v_estimator in estimators for dep in depth],
+            'tabpfn':[{}],
+            'nn': [{'activation':act} for act in activations],
+            'avnn': [{'activation':act} for act in activations]
+    }
+
+    result_values = []
+
+    for folder, source in directories:
+        files = [f for f in os.listdir(folder) if f.endswith('.arff')]
+        #for file in files:
+        for file in tqdm(files, desc=f"{source} processing"):
+
+        	path_file = os.path.join(folder, file)
+
+        	result_values.append(apply_classifier(arff_file_path=path_file,classifiers_params=classifiers_params, source_label=source))
+
+    print ('Source, Dataset, Classifier, Classifier_param, BAC, BAC_std')
+    for result_dataset in result_values:
+        for result in result_dataset:
+            source, dataset, clf, param, bac, std = result
+            print(f"{source}, {dataset}, {clf}, {param}, {float(bac):.4f}, {float(std):.4f}")
