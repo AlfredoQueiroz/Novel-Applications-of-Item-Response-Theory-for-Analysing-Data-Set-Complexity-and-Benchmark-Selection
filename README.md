@@ -1,6 +1,13 @@
 # Novel-Applications-of-Item-Response-Theory-for-Analysing-Data-Set-Complexity-and-Benchmark-Selection
 
-This repository contains the .arff files, the corresponding dataset complexity measures, and  the implemented classification methods described in the paper "Novel Applications of Item Response Theory for Analysing Data Set Complexity and Benchmark Selection".
+This repository contains the .arff datasets, the corresponding dataset complexity measures (see data_complexity.dat), and the implemented classification methods (see classifiers.py) as described in the paper "Novel Applications of Item Response Theory for Analysing Data Set Complexity and Benchmark Selection".
+
+The codebase was built using Python 3.12.2.
+To set up the environment, please install the required dependencies using:
+
+```bash
+pip install -r requirements.txt
+```
 
 📄 About the Paper
 
