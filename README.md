@@ -15,4 +15,4 @@ Title: Novel Applications of Item Response Theory for Analysing Data Set Complex
 
 Authors: J.L.J. Pereira, A.A.A. Exposito De Queiroz, T.M. Silva Filho, A.C. Lorena, R.G. Mantovani, G.L. Pappa, R.B.C. Prudêncio.
 
-Published in: Machine Learning, 2025, DOI: 
+Published in: Machine Learning, 2025, DOI: 10.1007/s10994-025-06873-3
