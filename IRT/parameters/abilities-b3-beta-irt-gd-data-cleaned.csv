@@ -1,0 +1,96 @@
+,ability
+"IBk_knn_param=((k=1, weights=distance),)",0.69541496
+"IBk_knn_param=((k=1, weights=uniform),)",0.69541496
+"IBk_knn_param=((k=10, weights=distance),)",0.71380174
+"IBk_knn_param=((k=10, weights=uniform),)",0.6741829
+"IBk_knn_param=((k=5, weights=distance),)",0.7130298
+"IBk_knn_param=((k=5, weights=uniform),)",0.68697727
+"adaboost_param=((n_estimators=100),)",0.79792947
+"adaboost_param=((n_estimators=1000),)",0.7978896
+"adaboost_param=((n_estimators=50),)",0.7979108
+"avnn_param=((activation=logistic),)",0.5036552
+"avnn_param=((activation=relu),)",0.5368238
+"decisiontree_param=((criterion=entropy, depth=3, splitter=best),)",0.75266945
+"decisiontree_param=((criterion=entropy, depth=3, splitter=random),)",0.64756274
+"decisiontree_param=((criterion=entropy, depth=50, splitter=best),)",0.81235236
+"decisiontree_param=((criterion=entropy, depth=50, splitter=random),)",0.7785777
+"decisiontree_param=((criterion=entropy, depth=None, splitter=best),)",0.812346
+"decisiontree_param=((criterion=entropy, depth=None, splitter=random),)",0.77854997
+"decisiontree_param=((criterion=gini, depth=3, splitter=best),)",0.7488617
+"decisiontree_param=((criterion=gini, depth=3, splitter=random),)",0.6530489
+"decisiontree_param=((criterion=gini, depth=50, splitter=best),)",0.7982271
+"decisiontree_param=((criterion=gini, depth=50, splitter=random),)",0.7742764
+"decisiontree_param=((criterion=gini, depth=None, splitter=best),)",0.79823244
+"decisiontree_param=((criterion=gini, depth=None, splitter=random),)",0.77428174
+"dummy_param=((strategy=most_frequent),)",0.4017074
+"dummy_param=((strategy=uniform),)",0.39525768
+"extratree_param=((criterion=entropy, depth=3),)",0.6239003
+"extratree_param=((criterion=entropy, depth=50),)",0.79337704
+"extratree_param=((criterion=entropy, depth=None),)",0.7933829
+"extratree_param=((criterion=gini, depth=3),)",0.6236942
+"extratree_param=((criterion=gini, depth=50),)",0.79002535
+"extratree_param=((criterion=gini, depth=None),)",0.79002684
+"gbm_param=((n_estimators=100, depth=3),)",0.83486044
+"gbm_param=((n_estimators=100, depth=50),)",0.80010307
+"gbm_param=((n_estimators=100, depth=None),)",0.80011064
+"gbm_param=((n_estimators=1000, depth=3),)",0.83498144
+"gbm_param=((n_estimators=1000, depth=50),)",0.8024994
+"gbm_param=((n_estimators=1000, depth=None),)",0.8024093
+"gbm_param=((n_estimators=50, depth=3),)",0.82491606
+"gbm_param=((n_estimators=50, depth=50),)",0.7986043
+"gbm_param=((n_estimators=50, depth=None),)",0.7985946
+"glmnet_param=((penalty=elasticnet, C=0.1),)",0.5839851
+"glmnet_param=((penalty=elasticnet, C=1.0),)",0.60846776
+"glmnet_param=((penalty=elasticnet, C=1000),)",0.6133455
+"glmnet_param=((penalty=l1, C=0.1),)",0.58963346
+"glmnet_param=((penalty=l1, C=1.0),)",0.6127829
+"glmnet_param=((penalty=l1, C=1000),)",0.6133587
+"glmnet_param=((penalty=l2, C=0.1),)",0.582234
+"glmnet_param=((penalty=l2, C=1.0),)",0.60597074
+"glmnet_param=((penalty=l2, C=1000),)",0.6133455
+"j48_param=((depth=3),)",0.7535715
+"j48_param=((depth=50),)",0.8013069
+"j48_param=((depth=None),)",0.8013035
+"lda_param=((tol=0.0001),)",0.65976185
+"lda_param=((tol=0.001),)",0.65982205
+"lda_param=((tol=0.01),)",0.65972793
+"multinom_param=((C=0.1),)",0.627535
+"multinom_param=((C=1.0),)",0.6540172
+"multinom_param=((C=1000),)",0.664017
+"nb_gaus_param=((),)",0.72609484
+"nn_param=((activation=logistic),)",0.5074276
+"nn_param=((activation=relu),)",0.5298352
+"rf_param=((n_estimators=100, depth=3),)",0.71328133
+"rf_param=((n_estimators=100, depth=50),)",0.8090855
+"rf_param=((n_estimators=100, depth=None),)",0.809086
+"rf_param=((n_estimators=1000, depth=3),)",0.7131016
+"rf_param=((n_estimators=1000, depth=50),)",0.8110706
+"rf_param=((n_estimators=1000, depth=None),)",0.811073
+"rf_param=((n_estimators=50, depth=3),)",0.7066462
+"rf_param=((n_estimators=50, depth=50),)",0.8067235
+"rf_param=((n_estimators=50, depth=None),)",0.80672586
+"svm_linear_param=((C=0.1),)",0.6387874
+"svm_linear_param=((C=1.0),)",0.65593106
+"svm_linear_param=((C=1000),)",0.6608046
+"svm_param=((C=0.1, kernel=poly, degree=3),)",0.5667574
+"svm_param=((C=0.1, kernel=poly, degree=5),)",0.61890614
+"svm_param=((C=0.1, kernel=rbf, degree=3),)",0.5145608
+"svm_param=((C=0.1, kernel=rbf, degree=5),)",0.5145608
+"svm_param=((C=1.0, kernel=poly, degree=3),)",0.6377812
+"svm_param=((C=1.0, kernel=poly, degree=5),)",0.6570856
+"svm_param=((C=1.0, kernel=rbf, degree=3),)",0.6250957
+"svm_param=((C=1.0, kernel=rbf, degree=5),)",0.6250957
+"svm_param=((C=1000, kernel=poly, degree=3),)",0.7194951
+"svm_param=((C=1000, kernel=poly, degree=5),)",0.70200264
+"svm_param=((C=1000, kernel=rbf, degree=3),)",0.75027686
+"svm_param=((C=1000, kernel=rbf, degree=5),)",0.75027686
+"tabpfn_param=((),)",0.88317364
+"xgb_param=((n_estimators=100, depth=3),)",0.8364857
+"xgb_param=((n_estimators=100, depth=50),)",0.8389096
+"xgb_param=((n_estimators=100, depth=None),)",0.8389467
+"xgb_param=((n_estimators=1000, depth=3),)",0.8309277
+"xgb_param=((n_estimators=1000, depth=50),)",0.8352755
+"xgb_param=((n_estimators=1000, depth=None),)",0.8353152
+"xgb_param=((n_estimators=50, depth=3),)",0.8373081
+"xgb_param=((n_estimators=50, depth=50),)",0.8403595
+"xgb_param=((n_estimators=50, depth=None),)",0.84080046
